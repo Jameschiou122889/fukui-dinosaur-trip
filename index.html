@@ -5636,7 +5636,7 @@ function toggleB5Transfer(btn) {
   'use strict';
 
   // ---- Pricing Tiers ----
-  var regPricingTiers = {
+  var regPricingTiers = window._SEC_TIERS = {
     bed:     { priceLow: 49000, priceHigh: 58000 },
     singleRoom: { priceLow: 69000, priceHigh: 79000 },
     noBed:   { priceLow: 44000, priceHigh: 52000 },
@@ -5645,14 +5645,14 @@ function toggleB5Transfer(btn) {
 
   // INTERNAL_MODE_START
   // !! 發給客戶前，應 strip 掉 INTERNAL_MODE_START 到 INTERNAL_MODE_END 之間的所有程式碼 !!
-  var RATE = 0.2;
-  var CHARTER_TOTAL = 85888;
-  var INSTRUCTOR_DAILY = 3000;
-  var INSTRUCTOR_DAYS = 5;
+  var RATE = window._SEC_RATE = 0.2;
+  var CHARTER_TOTAL = window._SEC_CHARTER = 85888;
+  var INSTRUCTOR_DAILY = window._SEC_INST_DAILY = 3000;
+  var INSTRUCTOR_DAYS = window._SEC_INST_DAYS = 5;
   var AGENCY_FEE_RATE = 0.02;
 
-  var BASE_ADULT_JPY = 77870;
-  var BASE_CHILD_JPY = 62490;
+  var BASE_ADULT_JPY = window._SEC_BASE_A = 77870;
+  var BASE_CHILD_JPY = window._SEC_BASE_C = 62490;
 
   // 共用項目（Day 1-2）
   var SHARED_ITEMS = [
@@ -6607,11 +6607,12 @@ function toggleB5Transfer(btn) {
   // INTERNAL_MODE_START
   // !! 發給客戶前，應 strip 掉 INTERNAL_MODE_START 到 INTERNAL_MODE_END 之間的所有程式碼 !!
   window.buildInternalCostTables = function() {
-    var R = RATE || 0.2;
-    var CT = CHARTER_TOTAL || 85888;
-    var ID = INSTRUCTOR_DAILY || 3000;
-    var IDAYS = INSTRUCTOR_DAYS || 5;
-    var BAJ = BASE_ADULT_JPY || 77870;
+    try {
+    var R = window._SEC_RATE || 0.2;
+    var CT = window._SEC_CHARTER || 85888;
+    var ID = window._SEC_INST_DAILY || 3000;
+    var IDAYS = window._SEC_INST_DAYS || 5;
+    var BAJ = window._SEC_BASE_A || 77870;
     var items = getBreakdownItems();
     var dailyItems = items.map(function(it) {
       var day = it.name.match(/^Day\d/);
@@ -6662,9 +6663,10 @@ function toggleB5Transfer(btn) {
 
     var marginBody = document.getElementById('internalMarginBody');
     if (marginBody) {
-      var tierBedInfo = regPricingTiers.bed;
-      var tierNoBedInfo = regPricingTiers.noBed;
-      var tierSingleInfo = regPricingTiers.singleRoom;
+      var tiers = window._SEC_TIERS || {};
+      var tierBedInfo = tiers.bed || {priceLow:49000,priceHigh:58000};
+      var tierNoBedInfo = tiers.noBed || {priceLow:44000,priceHigh:52000};
+      var tierSingleInfo = tiers.singleRoom || {priceLow:69000,priceHigh:79000};
       var mRows = '';
       mRows += '<tr><td>佔床售價（大人/小孩7+）</td><td class="num">NT$' + fmtN(tierBedInfo.priceLow) + '~' + fmtN(tierBedInfo.priceHigh) + '</td></tr>';
       mRows += '<tr><td>不佔床售價（小孩2-6）</td><td class="num">NT$' + fmtN(tierNoBedInfo.priceLow) + '~' + fmtN(tierNoBedInfo.priceHigh) + '</td></tr>';
@@ -6672,6 +6674,7 @@ function toggleB5Transfer(btn) {
       mRows += '<tr><td>毛利率</td><td class="num">由費用試算器即時計算</td></tr>';
       marginBody.innerHTML = mRows;
     }
+    } catch(e) { console.error('buildInternalCostTables error:', e); }
   }
 
   // Internal mode: show internal elements and build tables
