@@ -5286,6 +5286,45 @@ body {
           </div>
         </div>
 
+        <!-- Pricing Simulator -->
+        <div id="pricingSimulator" style="margin-bottom:24px;padding:20px;background:rgba(212,165,116,0.08);border:1px solid rgba(212,165,116,0.2);border-radius:12px;">
+          <div style="font-size:0.9rem;color:var(--amber);font-weight:600;margin-bottom:12px;">定價模擬器</div>
+          <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.8rem;color:rgba(245,239,230,0.8);">
+              <input type="radio" name="simMode" value="margin" checked onchange="runPricingSim()"> 固定毛利率 → 算售價
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.8rem;color:rgba(245,239,230,0.8);">
+              <input type="radio" name="simMode" value="price" onchange="runPricingSim()"> 固定售價 → 算毛利率
+            </label>
+          </div>
+          <div id="simMarginMode" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <span style="font-size:0.8rem;color:rgba(245,239,230,0.6);">目標毛利率：</span>
+            <input type="range" id="simMarginSlider" min="5" max="40" value="18" step="1" oninput="runPricingSim()" style="flex:1;min-width:120px;">
+            <span id="simMarginValue" style="font-size:1rem;color:var(--amber);font-weight:700;min-width:45px;">18%</span>
+          </div>
+          <div id="simPriceMode" style="display:none;gap:12px;align-items:center;flex-wrap:wrap;">
+            <span style="font-size:0.8rem;color:rgba(245,239,230,0.6);">佔床售價（NTD）：</span>
+            <input type="number" id="simPriceInput" value="63000" step="1000" min="40000" max="100000" oninput="runPricingSim()" style="width:100px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 10px;color:var(--text-light);font-size:0.9rem;">
+          </div>
+          <div id="simResult" style="margin-top:12px;overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:0.8rem;color:rgba(245,239,230,0.8);">
+              <thead>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+                  <th style="text-align:left;padding:6px;">類型</th>
+                  <th style="text-align:right;padding:6px;">成本</th>
+                  <th style="text-align:right;padding:6px;">建議售價</th>
+                  <th style="text-align:right;padding:6px;">毛利率</th>
+                </tr>
+              </thead>
+              <tbody id="simResultBody"></tbody>
+            </table>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px;">
+            <button onclick="applySimPricing()" style="background:var(--amber);color:var(--dark);border:none;padding:8px 16px;border-radius:6px;font-size:0.8rem;cursor:pointer;font-weight:600;">套用此定價</button>
+            <span style="font-size:0.7rem;color:rgba(245,239,230,0.4);align-self:center;">套用後客戶端售價會即時更新</span>
+          </div>
+        </div>
+
         <div class="calc-detail-toggle" style="margin-bottom:16px;">
           <button class="calc-detail-btn" onclick="toggleDetail(this)">
             查看費用明細 <span class="arrow">&#9660;</span>
@@ -6087,6 +6126,106 @@ function toggleB5Transfer(btn) {
   };
 
   // ---- Detail toggle ----
+  // ---- Pricing Simulator ----
+  window.runPricingSim = function() {
+    var mode = document.querySelector('input[name="simMode"]:checked')?.value || 'margin';
+    var marDiv = document.getElementById('simMarginMode');
+    var priDiv = document.getElementById('simPriceMode');
+    if (marDiv) marDiv.style.display = mode === 'margin' ? 'flex' : 'none';
+    if (priDiv) priDiv.style.display = mode === 'price' ? 'flex' : 'none';
+
+    // Get current cost data from recalc (use internal variables via closure)
+    var cs = window._SEC_CONFIG || {};
+    var R = window._SEC_RATE || 0.2;
+    var CT = window._SEC_CHARTER || 85888;
+    var ID = window._SEC_INST_DAILY || 3000;
+    var IDAYS = window._SEC_INST_DAYS || 5;
+    var BAJ = window._SEC_BASE_A || 110700;
+    var tiers = window._SEC_TIERS || {};
+
+    var adults = cs.adults || 2;
+    var childBed = cs.childBed || 0;
+    var childNoBed = cs.childNoBed || 0;
+    var infant = cs.infant || 0;
+    var bedPeople = adults + childBed;
+    var totalPeople = bedPeople + childNoBed + infant;
+    if (totalPeople === 0) return;
+
+    // Compute adult/child cost (simplified - same as recalc)
+    var items = (typeof getBreakdownItems === 'function') ? getBreakdownItems() : [];
+    var baseA = 0, baseC = 0;
+    for (var i = 0; i < items.length; i++) { baseA += items[i].adultJPY; baseC += items[i].childJPY; }
+    var charter = CT / totalPeople;
+    var actualDays = (cs.plan === 'B' && cs.transfer === '6days') ? 6 : IDAYS;
+    var instPP = (ID * actualDays + baseA * R) / totalPeople;
+    var adultCost = baseA * R + charter + instPP;
+    var childCost = baseC * R + charter + instPP;
+
+    var body = document.getElementById('simResultBody');
+    if (!body) return;
+    var rows = '';
+
+    if (mode === 'margin') {
+      var targetMargin = parseInt(document.getElementById('simMarginSlider')?.value || 18) / 100;
+      document.getElementById('simMarginValue').textContent = Math.round(targetMargin * 100) + '%';
+      // sell = cost / (1 - margin - agencyFee)
+      var factor = 1 - targetMargin - 0.02;
+      var sellAdult = Math.ceil(adultCost / factor / 1000) * 1000;
+      var sellChild = Math.ceil(childCost / factor / 1000) * 1000;
+      var sellInfant = 15000;
+      var agencyPP = (sellAdult * bedPeople + sellChild * childNoBed + sellInfant * infant) * 0.02 / totalPeople;
+      var adultFinal = adultCost + agencyPP;
+      var childFinal = childCost + agencyPP;
+
+      rows += '<tr><td>大人/佔床</td><td style="text-align:right">' + fmt(adultFinal) + '</td><td style="text-align:right;color:var(--amber);font-weight:700">NT$' + fmt(sellAdult) + '</td><td style="text-align:right;color:#7ec89b">' + ((sellAdult - adultFinal) / sellAdult * 100).toFixed(1) + '%</td></tr>';
+      rows += '<tr><td>小孩/不佔床</td><td style="text-align:right">' + fmt(childFinal) + '</td><td style="text-align:right;color:var(--amber);font-weight:700">NT$' + fmt(sellChild) + '</td><td style="text-align:right;color:#7ec89b">' + ((sellChild - childFinal) / sellChild * 100).toFixed(1) + '%</td></tr>';
+      var totalRev = sellAdult * bedPeople + sellChild * childNoBed + sellInfant * infant;
+      var totalCostSim = adultFinal * bedPeople + childFinal * childNoBed + sellInfant * 0.5 * infant;
+      rows += '<tr style="border-top:2px solid rgba(255,255,255,0.15);font-weight:700"><td>全團利潤</td><td colspan="2" style="text-align:right;color:#7ec89b;font-size:1rem">NT$' + fmt(totalRev - totalCostSim) + '</td><td></td></tr>';
+      // Store for apply
+      window._simSellAdult = sellAdult;
+      window._simSellChild = sellChild;
+    } else {
+      var inputPrice = parseInt(document.getElementById('simPriceInput')?.value || 63000);
+      var sellAdult2 = inputPrice;
+      // NoBed sells at ~87% of adult price
+      var sellChild2 = Math.round(inputPrice * 0.87 / 1000) * 1000;
+      var totalRev2 = sellAdult2 * bedPeople + sellChild2 * childNoBed + 15000 * infant;
+      var agencyPP2 = totalRev2 * 0.02 / totalPeople;
+      var adultFinal2 = adultCost + agencyPP2;
+      var childFinal2 = childCost + agencyPP2;
+      var adultM = (sellAdult2 - adultFinal2) / sellAdult2 * 100;
+      var childM = (sellChild2 - childFinal2) / sellChild2 * 100;
+
+      rows += '<tr><td>大人/佔床</td><td style="text-align:right">' + fmt(adultFinal2) + '</td><td style="text-align:right;color:var(--amber)">NT$' + fmt(sellAdult2) + '</td><td style="text-align:right;color:' + (adultM >= 0 ? '#7ec89b' : '#e74c3c') + '">' + adultM.toFixed(1) + '%</td></tr>';
+      rows += '<tr><td>小孩/不佔床</td><td style="text-align:right">' + fmt(childFinal2) + '</td><td style="text-align:right;color:var(--amber)">NT$' + fmt(sellChild2) + '</td><td style="text-align:right;color:' + (childM >= 0 ? '#7ec89b' : '#e74c3c') + '">' + childM.toFixed(1) + '%</td></tr>';
+      var totalCostSim2 = adultFinal2 * bedPeople + childFinal2 * childNoBed + 15000 * 0.5 * infant;
+      rows += '<tr style="border-top:2px solid rgba(255,255,255,0.15);font-weight:700"><td>全團利潤</td><td colspan="2" style="text-align:right;color:' + ((totalRev2 - totalCostSim2) >= 0 ? '#7ec89b' : '#e74c3c') + ';font-size:1rem">NT$' + fmt(totalRev2 - totalCostSim2) + '</td><td></td></tr>';
+      window._simSellAdult = sellAdult2;
+      window._simSellChild = sellChild2;
+    }
+    body.innerHTML = rows;
+  };
+
+  window.applySimPricing = function() {
+    if (!window._simSellAdult) return;
+    var sellA = window._simSellAdult;
+    var sellC = window._simSellChild;
+    var spread = 5000; // +/- 5000 range
+    regPricingTiers.bed.priceLow = sellA - spread;
+    regPricingTiers.bed.priceHigh = sellA + spread;
+    regPricingTiers.noBed.priceLow = sellC - spread;
+    regPricingTiers.noBed.priceHigh = sellC + spread;
+    regPricingTiers.singleRoom.priceLow = sellA + 15000;
+    regPricingTiers.singleRoom.priceHigh = sellA + 25000;
+    // Sync window ref
+    window._SEC_TIERS = regPricingTiers;
+    recalc();
+  };
+
+  // Init simulator after page load
+  setTimeout(function() { if (typeof runPricingSim === 'function') runPricingSim(); }, 500);
+
   window.toggleDetail = function(btn) {
     btn.classList.toggle('open');
     var body = document.getElementById('calcDetailBody');
