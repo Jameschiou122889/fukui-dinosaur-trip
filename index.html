@@ -2607,6 +2607,51 @@ body {
   }
 }
 
+/* Mobile venue cards: stack vertically instead of horizontal scroll */
+@media (max-width: 600px) {
+  .venue-scroll-container {
+    overflow: visible;
+    padding: 20px 20px 40px;
+  }
+  .venue-scroll-track {
+    flex-wrap: wrap;
+    width: auto;
+    gap: 16px;
+  }
+  .venue-card {
+    width: 100%;
+    flex-shrink: 1;
+  }
+  .venue-card:hover {
+    transform: none;
+  }
+  /* Sticky nav scroll hint */
+  .sticky-nav::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 32px;
+    background: linear-gradient(to right, transparent, rgba(15,25,35,0.95));
+    pointer-events: none;
+  }
+  /* Larger touch targets */
+  .venue-card-link {
+    padding: 8px 0;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .accommodation-links a {
+    padding: 6px 0;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .pill {
+    min-height: 40px;
+  }
+}
+
 @media print {
   .price-summary-sticky {
     position: static;
