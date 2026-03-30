@@ -2955,7 +2955,7 @@ body {
   color: var(--amber);
   margin-bottom: 12px;
 }
-.info-tabs { display: flex; overflow-x: auto; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid #ddd; }
+.info-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid #ddd; }
 .info-tab { background: none; border: none; padding: 12px 16px; cursor: pointer; color: #666; font-size: 0.85rem; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -2px; font-family: 'Noto Serif TC', serif; }
 .info-tab.active { color: #1a2332; border-bottom-color: #c9a96e; font-weight: 600; }
 .info-panel { display: none; }
@@ -3336,8 +3336,8 @@ body {
       <tr>
         <td style="padding: 8px;">每人加價</td>
         <td style="text-align: center; padding: 8px; color: var(--amber); background: rgba(76,175,80,0.08);">基準</td>
-        <td style="text-align: center; padding: 8px; color: var(--amber); font-size: 0.8rem; background: rgba(100,149,237,0.06);">+NT$1,500~3,500</td>
-        <td style="text-align: center; padding: 8px; color: var(--amber); font-size: 0.8rem; background: rgba(186,85,211,0.06);">+NT$12,000</td>
+        <td style="text-align: center; padding: 8px; color: var(--amber); font-size: 0.8rem; background: rgba(100,149,237,0.06);">約 +NT$1,500~3,500</td>
+        <td style="text-align: center; padding: 8px; color: var(--amber); font-size: 0.8rem; background: rgba(186,85,211,0.06);">約 +NT$12,000</td>
       </tr>
     </tbody>
   </table>
@@ -4284,7 +4284,7 @@ body {
     <div class="day-split reverse">
       <div class="reveal">
         <div class="day-image-wrapper">
-          <img src="https://pokepark-kanto.jp/assets/images/og-image.jpg" alt="PokéPark Kanto" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'venue-img-fallback\'>PokéPark Kanto<br>寶可夢主題公園</div>'">
+          <img src="images/pokepark/pokepark-01.jpg" alt="PokéPark Kanto 寶可夢主題公園" loading="lazy">
         </div>
       </div>
       <div class="reveal reveal-delay-1">
@@ -4356,6 +4356,38 @@ body {
         </div>
       </div>
     </div>
+
+    <!-- PokéPark Venue Card -->
+    <div style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+      <div class="venue-card reveal">
+        <img class="venue-card-photo" src="images/pokepark/pokepark-02.jpg" alt="PokéPark Kanto 園區入口" loading="lazy">
+        <div class="venue-card-body">
+          <div class="venue-card-name">PokéPark Kanto 寶可夢主題公園</div>
+          <div class="venue-card-desc">2026 年 2 月全新開幕！位於よみうりランド內，搭京王線再轉纜車入園。重現關都地區經典場景，等身大寶可夢模型、互動遊戲、主題餐廳和限定商品</div>
+          <div class="venue-detail">
+            <p class="venue-desc">園區重現《寶可夢 紅／綠》的關都地區世界觀，有等身大的噴火龍、卡比獸等寶可夢模型。互動遊戲讓孩子化身訓練家，主題餐廳提供寶可夢造型餐點，商品店有園區限定周邊。從調布飯店搭京王線約 10 分鐘即達。</p>
+            <div class="venue-tips">
+              <span class="tip-item">&#x1F3AB; 大人 &yen;6,000 / 小孩 &yen;4,000（預估）</span>
+              <span class="tip-item">&#9201; 建議停留整天</span>
+              <span class="tip-item">&#x1F476; 3 歲以上適合</span>
+              <span class="tip-item">&#x1F3A0; 需提前線上購買日期指定券</span>
+            </div>
+          </div>
+          <div class="venue-card-price">門票另計（預估） <span class="item-price">大人 &yen;6,000 / 小孩 &yen;4,000</span></div>
+          <div class="venue-card-links">
+            <a class="venue-card-link" href="https://pokepark-kanto.jp/" target="_blank" rel="noopener">官方網站</a>
+            <a class="venue-card-link" href="https://www.google.com/maps/place/Yomiuriland/" target="_blank" rel="noopener">Google Maps</a>
+          </div>
+          <div class="extra-photos" data-venue="pokepark">
+            <div class="extra-photo-grid">
+              <img src="images/pokepark/pokepark-01.jpg" alt="PokéPark 園區" loading="lazy">
+              <img src="images/pokepark/pokepark-03.jpg" alt="PokéPark 裝飾" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 </div><!-- /plan-content plan-B5 Day 4 -->
@@ -4367,7 +4399,7 @@ body {
     <div class="day-split reverse">
       <div class="reveal">
         <div class="day-image-wrapper">
-          <div class="venue-img-fallback">兼六園 &middot; 近江町市場<br>金澤半日遊</div>
+          <img src="images/kanazawa/kenrokuen-01.jpg" alt="兼六園" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
         </div>
       </div>
       <div class="reveal reveal-delay-1">
@@ -4404,6 +4436,52 @@ body {
         </div>
       </div>
     </div>
+
+    <!-- 金澤 Venue Cards -->
+    <div style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+      <div class="venue-card reveal">
+        <img class="venue-card-photo" src="images/kanazawa/kenrokuen-02.jpg" alt="兼六園" loading="lazy">
+        <div class="venue-card-body">
+          <div class="venue-card-name">兼六園（日本三名園）</div>
+          <div class="venue-card-desc">日本最著名的三大名園之一，四季皆美的迴遊式庭園</div>
+          <div class="venue-detail">
+            <p class="venue-desc">兼六園兼具「宏大、幽邃、人力、蒼古、水泉、眺望」六勝而得名。園內徽軫燈籠是金澤最具代表性的地標，霞之池倒映四季風景。夏季綠意盎然，帶孩子沿著小溪散步，觀察日式庭園的造景智慧。</p>
+            <div class="venue-tips">
+              <span class="tip-item">&#x1F3AB; 大人 &yen;320 / 小孩 &yen;100</span>
+              <span class="tip-item">&#9201; 建議停留 1-1.5 小時</span>
+              <span class="tip-item">&#x1F30A; 園內有小溪和噴泉，孩子很喜歡</span>
+            </div>
+          </div>
+          <div class="venue-card-price">&yen;320/大人 <span class="item-price">&yen;100/小孩</span></div>
+          <div class="venue-card-links">
+            <a class="venue-card-link" href="https://www.pref.ishikawa.jp/siro-niwa/kenrokuen/" target="_blank" rel="noopener">官方網站</a>
+            <a class="venue-card-link" href="https://www.google.com/maps/place/Kenrokuen/" target="_blank" rel="noopener">Google Maps</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="venue-card reveal reveal-delay-1">
+        <img class="venue-card-photo" src="images/kanazawa/omicho-01.jpg" alt="近江町市場" loading="lazy">
+        <div class="venue-card-body">
+          <div class="venue-card-name">近江町市場（金澤的廚房）</div>
+          <div class="venue-card-desc">超過 300 年歷史的傳統市場，新鮮海鮮和在地美食的天堂</div>
+          <div class="venue-detail">
+            <p class="venue-desc">被稱為「金澤的廚房」，有 170 多家店鋪。推薦現場品嚐海鮮丼、烤蟹腳、炸可樂餅，還有當季水果。市場氛圍熱鬧，孩子可以近距離觀察各種新鮮漁獲，是很好的食育體驗。</p>
+            <div class="venue-tips">
+              <span class="tip-item">&#x1F37B; 推薦海鮮丼 &yen;1,500-3,000</span>
+              <span class="tip-item">&#9201; 建議停留 1-1.5 小時</span>
+              <span class="tip-item">&#x1F366; 邊走邊吃很適合小孩</span>
+            </div>
+          </div>
+          <div class="venue-card-price">免費入場 <span style="color:rgba(245,239,230,0.5);font-size:0.8rem;">午餐自理</span></div>
+          <div class="venue-card-links">
+            <a class="venue-card-link" href="https://ohmicho-ichiba.com/" target="_blank" rel="noopener">官方網站</a>
+            <a class="venue-card-link" href="https://www.google.com/maps/place/Omicho+Market/" target="_blank" rel="noopener">Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 </div><!-- /plan-content plan-B6 Day 4 -->
@@ -4489,7 +4567,7 @@ body {
     <div class="day-split reverse">
       <div class="reveal">
         <div class="day-image-wrapper">
-          <img src="https://pokepark-kanto.jp/assets/images/og-image.jpg" alt="PokéPark Kanto" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'venue-img-fallback\'>PokéPark Kanto<br>寶可夢主題公園</div>'">
+          <img src="images/pokepark/pokepark-01.jpg" alt="PokéPark Kanto 寶可夢主題公園" loading="lazy">
         </div>
       </div>
       <div class="reveal reveal-delay-1">
@@ -4530,6 +4608,37 @@ body {
         </div>
       </div>
     </div>
+
+    <!-- PokéPark Venue Card -->
+    <div style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+      <div class="venue-card reveal">
+        <img class="venue-card-photo" src="images/pokepark/pokepark-02.jpg" alt="PokéPark Kanto 園區" loading="lazy">
+        <div class="venue-card-body">
+          <div class="venue-card-name">PokéPark Kanto 寶可夢主題公園</div>
+          <div class="venue-card-desc">2026 年 2 月全新開幕！重現關都地區經典場景，等身大寶可夢模型、互動遊戲、主題餐廳和限定商品</div>
+          <div class="venue-detail">
+            <p class="venue-desc">園區重現《寶可夢 紅／綠》的關都地區世界觀，有等身大的噴火龍、卡比獸等寶可夢模型。互動遊戲讓孩子化身訓練家，主題餐廳提供寶可夢造型餐點，商品店有園區限定周邊。從調布飯店搭京王線約 10 分鐘即達。</p>
+            <div class="venue-tips">
+              <span class="tip-item">&#x1F3AB; 大人 &yen;6,000 / 小孩 &yen;4,000（預估）</span>
+              <span class="tip-item">&#9201; 建議停留整天</span>
+              <span class="tip-item">&#x1F476; 3 歲以上適合</span>
+            </div>
+          </div>
+          <div class="venue-card-price">門票另計（預估） <span class="item-price">大人 &yen;6,000 / 小孩 &yen;4,000</span></div>
+          <div class="venue-card-links">
+            <a class="venue-card-link" href="https://pokepark-kanto.jp/" target="_blank" rel="noopener">官方網站</a>
+            <a class="venue-card-link" href="https://www.google.com/maps/place/Yomiuriland/" target="_blank" rel="noopener">Google Maps</a>
+          </div>
+          <div class="extra-photos" data-venue="pokepark-b6">
+            <div class="extra-photo-grid">
+              <img src="images/pokepark/pokepark-01.jpg" alt="PokéPark 園區" loading="lazy">
+              <img src="images/pokepark/pokepark-03.jpg" alt="PokéPark 裝飾" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 </div><!-- /plan-content plan-B6 Day 5 -->
@@ -4611,6 +4720,7 @@ body {
           <div class="option-card-prices">
             <span>大人 +&yen;4,500</span>
             <span>小孩 +&yen;3,300</span>
+            <span style="font-size:0.75rem;color:rgba(245,239,230,0.5);width:100%;">＊非預定行程點，門票及額外交通費另計</span>
           </div>
         </div>
       </div>
@@ -4629,8 +4739,8 @@ body {
           </div>
           <div class="option-card-desc">日本國家天然紀念物，世界三大奇勝之一。柱狀節理的壯觀岩壁是天然的地質教室。SEC 老師現場帶領觀察火成岩、柱狀節理的形成原理，結合恐龍時代的地質變動</div>
           <div class="option-card-prices">
-            <span>交通約 40 分鐘</span>
-            <span>免費參觀</span>
+            <span>免費參觀（需安排交通）</span>
+            <span style="font-size:0.75rem;color:rgba(245,239,230,0.5);width:100%;">＊非預定行程點，額外交通費另計</span>
           </div>
         </div>
       </div>
@@ -5118,7 +5228,7 @@ body {
       <div class="about-card reveal reveal-delay-1">
         <div class="about-icon">&#128737;&#65039;</div>
         <strong>安全承諾</strong>
-        <p>全程指定合作過的專屬司機，開車穩、情緒穩，帶小孩出門最安心。有幼童的家庭我們會預先安排安全座椅。團費已含旅行業責任保險，出發前我們也會協助提醒您為家人投保旅平險與旅遊不便險。孩子的安全，是我們的第一優先。</p>
+        <p>全程指定合作過的專屬司機，開車穩、情緒穩，帶小孩出門最安心。有幼童的家庭我們會預先安排安全座椅。團費已含旅行業責任保險，出發前我們也會協助提醒您為家人投保旅平險與旅遊不便險。每個家庭的安全與安心，是我們的第一優先。</p>
       </div>
     </div>
   </div>
@@ -5186,9 +5296,9 @@ body {
       <div class="info-panel" data-panel="insurance">
         <h3>&#128737;&#65039; 保險</h3>
         <ul>
-          <li><strong>團費已含</strong>：旅行業責任保險（意外身故保額 250 萬、意外醫療 10 萬實支實付）及履約保證保險</li>
-          <li><strong>建議自行加保</strong>：旅遊平安險及旅遊不便險。日本醫療費用高，一次門診約 ¥5,000–10,000，強烈建議加購海外醫療險</li>
-          <li>12 歲以下兒童依法投保身故上限為 200 萬</li>
+          <li><strong>團費已含</strong>：旅行業責任保險（中國信託產險承保，意外身故及失能 250 萬、意外醫療 20 萬實支實付）</li>
+          <li>14 歲以下及 70 歲以上旅客，依法最高保額以 250 萬為限</li>
+          <li><strong>建議自行加保</strong>：❶ 旅遊平安險（個人意外保障）❷ 旅遊不便險（班機延誤、行李遺失）❸ 海外突發疾病醫療險（日本門診一次約 ¥5,000–10,000，強烈建議）</li>
           <li>推薦：國泰、富邦線上投保（出發前一天仍可辦理），幾分鐘即可完成</li>
         </ul>
       </div>
@@ -5224,7 +5334,7 @@ body {
         <h3>&#128222; 緊急聯絡</h3>
         <ul>
           <li><strong>SEC 隨團講師</strong>：出發前一週提供手機號碼</li>
-          <li><strong>SEC 台灣客服</strong>：0938-773-500（邱博駿）</li>
+          <li><strong>SEC 台灣客服</strong>：0962-046-068（邱博駿）</li>
           <li><strong>SEC LINE</strong>：@sec.ventures</li>
           <li><strong>日本緊急電話</strong>：110（警察）/ 119（消防/救護車）</li>
           <li><strong>台灣駐日代表處</strong>：+81-3-3280-7811（東京）</li>
