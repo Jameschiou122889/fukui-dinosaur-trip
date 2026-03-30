@@ -3272,7 +3272,7 @@ body {
       <span class="hero-pill">日本福井 &rarr; 名古屋／東京</span>
       <span class="hero-pill">3-12歲親子</span>
       <span class="hero-pill">SEC專業導覽</span>
-      <span class="hero-pill" style="background:rgba(212,165,116,0.25);border-color:var(--amber);color:var(--amber);font-weight:600;">每人約 NT$49,000 起（8月旺季）</span>
+      <span class="hero-pill" style="background:rgba(212,165,116,0.25);border-color:var(--amber);color:var(--amber);font-weight:600;">每人約 NT$58,000 起（8月旺季）</span>
     </div>
     <div style="margin-top:32px;opacity:0;animation:fadeInUp 1s 1.1s forwards;">
       <a href="#calc-reg" style="display:inline-block;background:var(--amber);color:var(--dark);font-family:'Noto Serif TC',serif;font-weight:600;padding:14px 36px;border-radius:100px;text-decoration:none;font-size:1rem;letter-spacing:1px;transition:transform 0.3s,box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(212,165,116,0.4)';" onmouseout="this.style.transform='';this.style.boxShadow='';">立即規劃行程</a>
@@ -3395,8 +3395,8 @@ body {
       <tr>
         <td style="padding: 8px;">每人加價</td>
         <td style="text-align: center; padding: 8px; color: var(--amber); background: rgba(76,175,80,0.08);">基準</td>
-        <td style="text-align: center; padding: 8px; color: var(--amber); font-size: 0.8rem; background: rgba(100,149,237,0.06);">約 +NT$1,500~3,500</td>
-        <td style="text-align: center; padding: 8px; color: var(--amber); font-size: 0.8rem; background: rgba(186,85,211,0.06);">約 +NT$12,000</td>
+        <td style="text-align: center; padding: 8px; color: var(--amber); font-size: 0.8rem; background: rgba(100,149,237,0.06);">約 +NT$2,000~5,000</td>
+        <td style="text-align: center; padding: 8px; color: var(--amber); font-size: 0.8rem; background: rgba(186,85,211,0.06);">約 +NT$9,000~10,000</td>
       </tr>
     </tbody>
   </table>
@@ -5686,11 +5686,12 @@ function toggleB5Transfer(btn) {
   'use strict';
 
   // ---- Pricing Tiers ----
+  // 8月旺季售價（已含旺季成本加價）
   var regPricingTiers = window._SEC_TIERS = {
-    bed:     { priceLow: 49000, priceHigh: 58000 },
-    singleRoom: { priceLow: 69000, priceHigh: 79000 },
-    noBed:   { priceLow: 44000, priceHigh: 52000 },
-    infant:  { priceLow: 10000, priceHigh: 10000 }
+    bed:     { priceLow: 58000, priceHigh: 68000 },
+    singleRoom: { priceLow: 78000, priceHigh: 88000 },
+    noBed:   { priceLow: 52000, priceHigh: 62000 },
+    infant:  { priceLow: 15000, priceHigh: 15000 }
   };
 
   // INTERNAL_MODE_START
@@ -5701,28 +5702,28 @@ function toggleB5Transfer(btn) {
   var INSTRUCTOR_DAYS = window._SEC_INST_DAYS = 5;
   var AGENCY_FEE_RATE = 0.02;
 
-  var BASE_ADULT_JPY = window._SEC_BASE_A = 77870;
-  var BASE_CHILD_JPY = window._SEC_BASE_C = 62490;
+  var BASE_ADULT_JPY = window._SEC_BASE_A = 110700;
+  var BASE_CHILD_JPY = window._SEC_BASE_C = 95350;
 
-  // 共用項目（Day 1-2）
+  // 共用項目（Day 1-2）— 8月旺季價格（含盂蘭盆加價緩衝）
   var SHARED_ITEMS = [
-    { name: 'Day1 住宿 Dormy Inn',     adultJPY: 10000, childJPY: 10000 },
+    { name: 'Day1 住宿 Dormy Inn',     adultJPY: 22000, childJPY: 22000 },
     { name: 'Day1 晚餐 北陸特色料理',    adultJPY: 2500,  childJPY: 2500 },
     { name: 'Day2 恐龍博物館入場',       adultJPY: 1000,  childJPY: 500 },
     { name: 'Day2 化石挖掘',             adultJPY: 1300,  childJPY: 650 },
     { name: 'Day2 手套',                 adultJPY: 200,   childJPY: 200 },
-    { name: 'Day2 住宿',                 adultJPY: 10000, childJPY: 10000 },
+    { name: 'Day2 住宿',                 adultJPY: 22000, childJPY: 22000 },
     { name: 'Day2 午餐 DINO CAFE',        adultJPY: 1500,  childJPY: 1500 },
     { name: 'Day3 恐龍列車+博物館',      adultJPY: 4900,  childJPY: 3500 },
     { name: 'Day3 午餐（特製恐龍午餐）',  adultJPY: 2000,  childJPY: 2000 }
   ];
 
-  // 方案 A 專屬（Day 3-5：名古屋路線）
+  // 方案 A 專屬（Day 3-5：名古屋路線）— 8月旺季價格
   var PLAN_A_ITEMS = [
-    { name: 'Day3 住宿 名古屋',          adultJPY: 20585, childJPY: 15740 },
+    { name: 'Day3 住宿 名古屋',          adultJPY: 25000, childJPY: 20000 },
     { name: 'Day4 SEC策展實習生課程',     adultJPY: 500,   childJPY: 500 },
     { name: 'Day4 名古屋科學館',          adultJPY: 800,   childJPY: 0 },
-    { name: 'Day4 住宿 名古屋',          adultJPY: 20585, childJPY: 13400 },
+    { name: 'Day4 住宿 名古屋',          adultJPY: 25000, childJPY: 18000 },
     { name: 'Day4 午餐 日式便當',         adultJPY: 1500,  childJPY: 1500 },
     { name: 'Day5 水和點心',             adultJPY: 500,   childJPY: 500 }
   ];
@@ -5731,30 +5732,30 @@ function toggleB5Transfer(btn) {
   var PLAN_B_ITEMS = {
     shinkansen: [
       { name: 'Day3 新幹線（福井→金澤→東京）', adultJPY: 14000, childJPY: 7000 },
-      { name: 'Day3 住宿 東京（估）',    adultJPY: 18000, childJPY: 18000 },
+      { name: 'Day3 住宿 東京（估）',    adultJPY: 25000, childJPY: 25000 },
       { name: 'Day4 PokéPark 門票（估）', adultJPY: 6000,  childJPY: 4000 },
       { name: 'Day4 SEC策展實習生課程',   adultJPY: 500,   childJPY: 500 },
-      { name: 'Day4 住宿 東京（估）',    adultJPY: 18000, childJPY: 18000 },
+      { name: 'Day4 住宿 東京（估）',    adultJPY: 25000, childJPY: 25000 },
       { name: 'Day4 午餐 PokéPark',      adultJPY: 2000,  childJPY: 2000 },
       { name: 'Day5 機場接送+水和點心',   adultJPY: 1000,  childJPY: 1000 }
     ],
     charter: [
       { name: 'Day3 包車（福井→東京）',  adultJPY: 0,     childJPY: 0 },
-      { name: 'Day3 住宿 東京（估）',    adultJPY: 18000, childJPY: 18000 },
+      { name: 'Day3 住宿 東京（估）',    adultJPY: 25000, childJPY: 25000 },
       { name: 'Day4 PokéPark 門票（估）', adultJPY: 6000,  childJPY: 4000 },
       { name: 'Day4 SEC策展實習生課程',   adultJPY: 500,   childJPY: 500 },
-      { name: 'Day4 住宿 東京（估）',    adultJPY: 18000, childJPY: 18000 },
+      { name: 'Day4 住宿 東京（估）',    adultJPY: 25000, childJPY: 25000 },
       { name: 'Day4 午餐 PokéPark',      adultJPY: 2000,  childJPY: 2000 },
       { name: 'Day5 機場接送+水和點心',   adultJPY: 1000,  childJPY: 1000 }
     ],
     '6days': [
       { name: 'Day3 包車（福井→金澤）',  adultJPY: 0,     childJPY: 0 },
-      { name: 'Day3 住宿 金澤（估）',    adultJPY: 15000, childJPY: 15000 },
+      { name: 'Day3 住宿 金澤（估）',    adultJPY: 22000, childJPY: 22000 },
       { name: 'Day4 新幹線（金澤→東京）', adultJPY: 14000, childJPY: 7000 },
-      { name: 'Day4 住宿 東京（估）',    adultJPY: 18000, childJPY: 18000 },
+      { name: 'Day4 住宿 東京（估）',    adultJPY: 25000, childJPY: 25000 },
       { name: 'Day5 PokéPark 門票（估）', adultJPY: 6000,  childJPY: 4000 },
       { name: 'Day5 SEC策展實習生課程',   adultJPY: 500,   childJPY: 500 },
-      { name: 'Day5 住宿 東京（估）',    adultJPY: 18000, childJPY: 18000 },
+      { name: 'Day5 住宿 東京（估）',    adultJPY: 25000, childJPY: 25000 },
       { name: 'Day5 午餐 PokéPark',      adultJPY: 2000,  childJPY: 2000 },
       { name: 'Day6 機場接送+水和點心',   adultJPY: 1000,  childJPY: 1000 }
     ]
@@ -5782,9 +5783,9 @@ function toggleB5Transfer(btn) {
   // Plan B Day3-4: Tokyo hotels (est ¥18,000×2) + PokéPark (est ¥6,000) + transfer
   // 調價 = 成本差 ÷ (1 - 目標毛利率14%)，確保毛利率與方案A接近
   var PLAN_B_ADJUSTMENTS = {
-    shinkansen: { adultNTD: 3500, childNTD: 4500, label: '方案B＋新幹線' },
-    charter:    { adultNTD: 1500, childNTD: 3500, label: '方案B＋包車' },
-    '6days':    { adultNTD: 12000, childNTD: 11000, label: '方案B＋6天（含金澤一晚）' }
+    shinkansen: { adultNTD: 4500, childNTD: 5000, label: '方案B＋新幹線' },
+    charter:    { adultNTD: 2000, childNTD: 4000, label: '方案B＋包車' },
+    '6days':    { adultNTD: 9000, childNTD: 10000, label: '方案B＋6天（含金澤一晚）' }
   };
 
   // ---- State ----
