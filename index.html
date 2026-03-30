@@ -1338,7 +1338,7 @@ body {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 900;
   background: rgba(26, 26, 46, 0.9);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -3242,9 +3242,9 @@ body {
 <nav class="sticky-nav" id="stickyNav">
   <div class="sticky-nav-inner">
     <a href="#itinerary" class="nav-link active">行程總覽</a>
-    <a href="#" class="nav-link" data-plan="A" onclick="switchPlan('A',true);return false;">方案 A</a>
-    <a href="#" class="nav-link" data-plan="B5" onclick="switchPlan('B5',true);return false;">方案 B 5天</a>
-    <a href="#" class="nav-link" data-plan="B6" onclick="switchPlan('B6',true);return false;">方案 B 6天</a>
+    <a href="#" class="nav-link" data-plan="A" onclick="switchPlan('A');return false;">方案 A</a>
+    <a href="#" class="nav-link" data-plan="B5" onclick="switchPlan('B5');return false;">方案 B 5天</a>
+    <a href="#" class="nav-link" data-plan="B6" onclick="switchPlan('B6');return false;">方案 B 6天</a>
     <a href="#calc-reg" class="nav-link">費用與報名</a>
     <a href="#highlights" class="nav-link">知識亮點</a>
     <a href="#travel-info" class="nav-link">旅遊資訊</a>
@@ -6381,6 +6381,8 @@ function toggleB5Transfer(btn) {
     deferredPrompt = e;
     if (banner) {
       banner.style.display = 'flex';
+      // Auto-dismiss after 8 seconds
+      setTimeout(function() { if (banner) banner.style.display = 'none'; }, 8000);
     }
   });
 
