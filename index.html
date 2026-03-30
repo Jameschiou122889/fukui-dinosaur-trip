@@ -6607,7 +6607,11 @@ function toggleB5Transfer(btn) {
   // INTERNAL_MODE_START
   // !! 發給客戶前，應 strip 掉 INTERNAL_MODE_START 到 INTERNAL_MODE_END 之間的所有程式碼 !!
   window.buildInternalCostTables = function() {
-    var R = 0.2;
+    var R = RATE || 0.2;
+    var CT = CHARTER_TOTAL || 85888;
+    var ID = INSTRUCTOR_DAILY || 3000;
+    var IDAYS = INSTRUCTOR_DAYS || 5;
+    var BAJ = BASE_ADULT_JPY || 77870;
     var items = getBreakdownItems();
     var dailyItems = items.map(function(it) {
       var day = it.name.match(/^Day\d/);
@@ -6642,15 +6646,15 @@ function toggleB5Transfer(btn) {
       var childNoBed = configState.childNoBed || 0;
       var infants = configState.infant || 0;
       var total = adults + childBed + childNoBed + infants;
-      var charterPP = total > 0 ? CHARTER_TOTAL / total : 0;
-      var adultTravelNTD = BASE_ADULT_JPY * RATE;
-      var actualDays = (configState.plan === 'B' && configState.transfer === '6days') ? 6 : INSTRUCTOR_DAYS;
-      var instructorCost = INSTRUCTOR_DAILY * actualDays + adultTravelNTD;
+      var charterPP = total > 0 ? CT / total : 0;
+      var adultTravelNTD = BAJ * R;
+      var actualDays = (configState.plan === 'B' && configState.transfer === '6days') ? 6 : IDAYS;
+      var instructorCost = ID * actualDays + adultTravelNTD;
       var instructorPP = total > 0 ? instructorCost / total : 0;
 
       var fRows = '';
-      fRows += '<tr><td>包車總費用 NT$' + fmtN(CHARTER_TOTAL) + ' ÷ ' + total + ' 人</td><td class="num">NT$' + fmtN(charterPP) + ' /人</td></tr>';
-      fRows += '<tr><td>講師費 NT$' + fmtN(INSTRUCTOR_DAILY) + ' × ' + actualDays + '天 + 一位成人旅費 NT$' + fmtN(adultTravelNTD) + '</td><td class="num">NT$' + fmtN(instructorCost) + ' 總計</td></tr>';
+      fRows += '<tr><td>包車總費用 NT$' + fmtN(CT) + ' ÷ ' + total + ' 人</td><td class="num">NT$' + fmtN(charterPP) + ' /人</td></tr>';
+      fRows += '<tr><td>講師費 NT$' + fmtN(ID) + ' × ' + actualDays + '天 + 一位成人旅費 NT$' + fmtN(adultTravelNTD) + '</td><td class="num">NT$' + fmtN(instructorCost) + ' 總計</td></tr>';
       fRows += '<tr><td>講師攤分 ÷ ' + total + ' 人</td><td class="num">NT$' + fmtN(instructorPP) + ' /人</td></tr>';
       fRows += '<tr><td>旅行社代辦手續費</td><td class="num">售價 × 2%</td></tr>';
       fixedBody.innerHTML = fRows;
