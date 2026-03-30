@@ -5738,7 +5738,7 @@ function toggleB5Transfer(btn) {
   };
 
   // ---- State ----
-  var configState = {
+  var configState = window._SEC_CONFIG = {
     rooms: [
       { type: 'twin', adults: 2, children: [{ age: 7 }] },
       { type: 'twin', adults: 1, children: [{ age: 3 }] }
@@ -6642,14 +6642,15 @@ function toggleB5Transfer(btn) {
 
     var fixedBody = document.getElementById('internalFixedBody');
     if (fixedBody) {
-      var adults = configState.adults || 2;
-      var childBed = configState.childBed || 0;
-      var childNoBed = configState.childNoBed || 0;
-      var infants = configState.infant || 0;
+      var cs = window._SEC_CONFIG || {};
+      var adults = cs.adults || 2;
+      var childBed = cs.childBed || 0;
+      var childNoBed = cs.childNoBed || 0;
+      var infants = cs.infant || 0;
       var total = adults + childBed + childNoBed + infants;
       var charterPP = total > 0 ? CT / total : 0;
       var adultTravelNTD = BAJ * R;
-      var actualDays = (configState.plan === 'B' && configState.transfer === '6days') ? 6 : IDAYS;
+      var actualDays = (cs.plan === 'B' && cs.transfer === '6days') ? 6 : IDAYS;
       var instructorCost = ID * actualDays + adultTravelNTD;
       var instructorPP = total > 0 ? instructorCost / total : 0;
 
