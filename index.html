@@ -6486,6 +6486,15 @@ function toggleB5Transfer(btn) {
           var cNTD = item.childJPY * RATE;
           rows += '<tr><td>' + item.name + '</td><td class="num">' + fmt(aNTD) + '</td><td class="num">' + fmt(cNTD) + '</td></tr>';
         }
+        // Show selected optional add-ons as separate rows
+        var optNames2 = { fossilResearch: '化石研究體驗（選配）', shibamasa: '芝政世界（選配）', tojinbo: '東尋坊（選配，免費）' };
+        for (var oKey2 in OPTIONS) {
+          if (optionState[oKey2]) {
+            var oA = OPTIONS[oKey2].adultJPY * RATE;
+            var oC = OPTIONS[oKey2].childJPY * RATE;
+            rows += '<tr style="color:#e8a87c;"><td>' + (optNames2[oKey2] || oKey2) + '</td><td class="num">+' + fmt(oA) + '</td><td class="num">+' + fmt(oC) + '</td></tr>';
+          }
+        }
         rows += '<tr><td>包車分攤（NT$' + fmt(CHARTER_TOTAL) + ' / ' + totalPeople + '人）</td><td class="num">' + fmt(charterPerPerson) + '</td><td class="num">' + fmt(charterPerPerson) + '</td></tr>';
         rows += '<tr><td>隨團導師分攤（' + actualInstructorDays + '日 \u00d7 NT$' + fmt(INSTRUCTOR_DAILY) + ' + 旅費）</td><td class="num">' + fmt(instructorPerPerson) + '</td><td class="num">' + fmt(instructorPerPerson) + '</td></tr>';
         rows += '<tr><td>代辦手續費（2%）</td><td class="num">' + fmt(agencyFeePerPerson) + '</td><td class="num">' + fmt(agencyFeePerPerson) + '</td></tr>';
