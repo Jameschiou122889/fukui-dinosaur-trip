@@ -5226,9 +5226,19 @@ body {
           <div class="price-note" id="priceNote">＊不含來回機票｜實際費用依出發季節調整</div>
           <!-- Internal cost display (hidden by default) -->
           <div class="price-summary-internal internal-only" id="summaryInternal">
-            <div class="price-item">
-              <span class="price-label">毛利率</span>
-              <span class="price-value" id="summaryMargin">--</span>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;font-size:0.8rem;">
+              <div style="text-align:center;">
+                <div style="color:rgba(245,239,230,0.5);">毛利率</div>
+                <div style="color:#7ec89b;font-size:1.1rem;font-weight:700;" id="summaryMargin">--</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="color:rgba(245,239,230,0.5);">總利潤</div>
+                <div style="color:#7ec89b;font-size:1.1rem;font-weight:700;" id="summaryProfit">--</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="color:rgba(245,239,230,0.5);">人均成本</div>
+                <div style="color:#e8a87c;font-size:1.1rem;font-weight:700;" id="summaryAvgCost">--</div>
+              </div>
             </div>
           </div>
           <button class="cta-button" onclick="scrollToReg()">
@@ -5242,6 +5252,39 @@ body {
     <div class="internal-only" id="internalCostBlock">
       <div class="internal-cost-section">
         <h3>SEC 內部成本明細（僅限內部模式）</h3>
+
+        <!-- Dashboard -->
+        <div id="internalDashboard" style="margin-bottom:24px;padding:20px;background:rgba(126,200,155,0.08);border:1px solid rgba(126,200,155,0.2);border-radius:12px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;text-align:center;margin-bottom:16px;">
+            <div>
+              <div style="font-size:0.75rem;color:rgba(245,239,230,0.5);">總營收（中間值）</div>
+              <div style="font-size:1.3rem;font-weight:700;color:var(--amber);" id="dashRevenue">--</div>
+            </div>
+            <div>
+              <div style="font-size:0.75rem;color:rgba(245,239,230,0.5);">總成本</div>
+              <div style="font-size:1.3rem;font-weight:700;color:#e8a87c;" id="dashCost">--</div>
+            </div>
+            <div>
+              <div style="font-size:0.75rem;color:rgba(245,239,230,0.5);">總利潤</div>
+              <div style="font-size:1.3rem;font-weight:700;color:#7ec89b;" id="dashProfit">--</div>
+            </div>
+          </div>
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:0.8rem;color:rgba(245,239,230,0.8);">
+              <thead>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+                  <th style="text-align:left;padding:6px;">類型</th>
+                  <th style="text-align:right;padding:6px;">人數</th>
+                  <th style="text-align:right;padding:6px;">成本/人</th>
+                  <th style="text-align:right;padding:6px;">售價/人（中）</th>
+                  <th style="text-align:right;padding:6px;">利潤/人</th>
+                  <th style="text-align:right;padding:6px;">毛利率</th>
+                </tr>
+              </thead>
+              <tbody id="dashPerPersonBody"></tbody>
+            </table>
+          </div>
+        </div>
 
         <div class="calc-detail-toggle" style="margin-bottom:16px;">
           <button class="calc-detail-btn" onclick="toggleDetail(this)">
@@ -6242,8 +6285,57 @@ function toggleB5Transfer(btn) {
       var totalCost = adultCostNTD * bedPeople + childCostNTD * childNoBed + (tierInfant.priceLow * 0.5) * infant;
       var margin = totalRevenueMid > 0 ? ((totalRevenueMid - totalCost) / totalRevenueMid * 100) : 0;
 
+      var totalProfit = totalRevenueMid - totalCost;
+      var avgCost = totalPeople > 0 ? totalCost / totalPeople : 0;
+
       var marginEl = document.getElementById('summaryMargin');
       if (marginEl) marginEl.textContent = margin.toFixed(1) + '%';
+      var profitEl = document.getElementById('summaryProfit');
+      if (profitEl) profitEl.textContent = 'NT$' + fmt(totalProfit);
+      var avgCostEl = document.getElementById('summaryAvgCost');
+      if (avgCostEl) avgCostEl.textContent = 'NT$' + fmt(avgCost);
+
+      // Dashboard
+      var dashRev = document.getElementById('dashRevenue');
+      var dashCostEl = document.getElementById('dashCost');
+      var dashProfitEl = document.getElementById('dashProfit');
+      if (dashRev) dashRev.textContent = 'NT$' + fmt(totalRevenueMid);
+      if (dashCostEl) dashCostEl.textContent = 'NT$' + fmt(totalCost);
+      if (dashProfitEl) {
+        dashProfitEl.textContent = 'NT$' + fmt(totalProfit);
+        dashProfitEl.style.color = totalProfit >= 0 ? '#7ec89b' : '#e74c3c';
+      }
+
+      // Per-person breakdown table
+      var ppBody = document.getElementById('dashPerPersonBody');
+      if (ppBody) {
+        var sellSingleMid = Math.round((tierSingle.priceLow + tierSingle.priceHigh) / 2) + planAdultAdj;
+        var infantCost = tierInfant.priceLow * 0.5;
+        var ppRows = '';
+        var adultProfit = sellAdultMid - adultCostNTD;
+        var adultMarginPct = sellAdultMid > 0 ? (adultProfit / sellAdultMid * 100) : 0;
+        if (adults - singleRoomAdults > 0) {
+          ppRows += '<tr><td>大人（共住）</td><td style="text-align:right">' + (adults - singleRoomAdults) + '</td><td style="text-align:right">' + fmt(adultCostNTD) + '</td><td style="text-align:right;color:var(--amber)">' + fmt(sellAdultMid) + '</td><td style="text-align:right;color:' + (adultProfit >= 0 ? '#7ec89b' : '#e74c3c') + '">' + fmt(adultProfit) + '</td><td style="text-align:right">' + adultMarginPct.toFixed(1) + '%</td></tr>';
+        }
+        if (singleRoomAdults > 0) {
+          var singleProfit = sellSingleMid - adultCostNTD;
+          var singleMarginPct = sellSingleMid > 0 ? (singleProfit / sellSingleMid * 100) : 0;
+          ppRows += '<tr><td>大人（單人房）</td><td style="text-align:right">' + singleRoomAdults + '</td><td style="text-align:right">' + fmt(adultCostNTD) + '</td><td style="text-align:right;color:var(--amber)">' + fmt(sellSingleMid) + '</td><td style="text-align:right;color:#7ec89b">' + fmt(singleProfit) + '</td><td style="text-align:right">' + singleMarginPct.toFixed(1) + '%</td></tr>';
+        }
+        if (childBed > 0) {
+          ppRows += '<tr><td>小孩（佔床 7+）</td><td style="text-align:right">' + childBed + '</td><td style="text-align:right">' + fmt(adultCostNTD) + '</td><td style="text-align:right;color:var(--amber)">' + fmt(sellAdultMid) + '</td><td style="text-align:right;color:' + (adultProfit >= 0 ? '#7ec89b' : '#e74c3c') + '">' + fmt(adultProfit) + '</td><td style="text-align:right">' + adultMarginPct.toFixed(1) + '%</td></tr>';
+        }
+        if (childNoBed > 0) {
+          var noBedProfit = sellChildMid - childCostNTD;
+          var noBedMarginPct = sellChildMid > 0 ? (noBedProfit / sellChildMid * 100) : 0;
+          ppRows += '<tr><td>小孩（不佔床 2-6）</td><td style="text-align:right">' + childNoBed + '</td><td style="text-align:right">' + fmt(childCostNTD) + '</td><td style="text-align:right;color:var(--amber)">' + fmt(sellChildMid) + '</td><td style="text-align:right;color:' + (noBedProfit >= 0 ? '#7ec89b' : '#e74c3c') + '">' + fmt(noBedProfit) + '</td><td style="text-align:right">' + noBedMarginPct.toFixed(1) + '%</td></tr>';
+        }
+        if (infant > 0) {
+          ppRows += '<tr><td>嬰兒（&lt;2）</td><td style="text-align:right">' + infant + '</td><td style="text-align:right">' + fmt(infantCost) + '</td><td style="text-align:right;color:var(--amber)">' + fmt(tierInfant.priceLow) + '</td><td style="text-align:right;color:#7ec89b">' + fmt(tierInfant.priceLow - infantCost) + '</td><td style="text-align:right">50.0%</td></tr>';
+        }
+        ppRows += '<tr style="border-top:2px solid rgba(255,255,255,0.15);font-weight:700;"><td>合計</td><td style="text-align:right">' + totalPeople + '</td><td style="text-align:right;color:#e8a87c">' + fmt(totalCost) + '</td><td style="text-align:right;color:var(--amber)">' + fmt(totalRevenueMid) + '</td><td style="text-align:right;color:' + (totalProfit >= 0 ? '#7ec89b' : '#e74c3c') + '">' + fmt(totalProfit) + '</td><td style="text-align:right">' + margin.toFixed(1) + '%</td></tr>';
+        ppBody.innerHTML = ppRows;
+      }
 
       var tbody = document.getElementById('breakdownBody');
       if (tbody) {
